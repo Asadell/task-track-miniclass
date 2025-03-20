@@ -24,9 +24,9 @@ const TaskBar: React.FC<TaskBarProps> = ({ tasks, setIsModalOpen }) => {
       </div>
 
       {backendUrl ? (
-        <p className="text-gray-800">http://{backendUrl}/</p>
+        <p className="text-gray-800">http://{backendUrl}/api/</p>
       ) : (
-        <p className="text-gray-400">http://example.com/</p>
+        <p className="text-gray-400">http://example.com/api/</p>
       )}
 
       <div className="flex items-center gap-2">

@@ -18,7 +18,8 @@ interface ColumnProps {
     newName: string,
     newDescription: string,
     newDeadline: string,
-    newPriority: string
+    newPriority: string,
+    newStatus: "todo" | "inProgress" | "done"
   ) => void;
   deleteTask: (
     category: "todo" | "inProgress" | "done",
@@ -75,9 +76,9 @@ const Column: React.FC<ColumnProps> = ({
       </div>
 
       <div className="space-y-2">
-        {tasks.map((task) => (
+        {tasks.map((task, index) => (
           <div
-            key={task.id}
+            key={index}
             draggable
             onDragStart={(e) => handleDragStart(e, task)}
             className={`p-3 rounded-md shadow cursor-pointer flex justify-between items-center bg-white`}>
@@ -89,25 +90,25 @@ const Column: React.FC<ColumnProps> = ({
                 setEditMode={setEditMode}
               />
             ) : (
-              <div className="w-full">
-                <p className="font-semibold text-lg">{task.name}</p>
-                <p className="text-sm text-gray-600">{task.description}</p>
+              <div className="w-full p-4 bg-white rounded-lg shadow-md">
+                <p className="font-bold text-lg text-gray-800">{task.name}</p>
+                <p className="text-sm text-gray-600 mt-1">{task.description}</p>
 
-                <div className="flex items-center text-xs text-gray-500 mt-2">
+                <div className="flex items-center text-xs text-gray-500 mt-3">
                   <span className="mr-1">🕒</span>
                   <span>{formatDate(task.deadline)}</span>
                 </div>
 
-                <div className="flex items-center text-xs font-semibold mt-2">
+                <div className="mt-3">
                   <span
-                    className={`ml-1 px-2 py-1 rounded-sm text-xs
-                      ${
-                        task.priority === "low"
-                          ? "bg-[#E5FFE4] text-[#05CD05]"
-                          : task.priority === "medium"
-                          ? "bg-[#FFF6E5] text-[#FFB118]"
-                          : "bg-[#FFE5E6] text-[#FE1414]"
-                      }`}>
+                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold
+                    ${
+                      task.priority === "low"
+                        ? "bg-green-100 text-green-700"
+                        : task.priority === "medium"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}>
                     {task.priority}
                   </span>
                 </div>

@@ -5,7 +5,7 @@ export const useApiRequest = () => {
   const { backendUrl } = useApi();
 
   const api = axios.create({
-    baseURL: backendUrl,
+    baseURL: `http://${backendUrl}/api/`,
   });
 
   return api;

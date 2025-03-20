@@ -10,7 +10,8 @@ interface EditTaskProps {
     newName: string,
     newDescription: string,
     newDeadline: string,
-    newPriority: string
+    newPriority: string,
+    newStatus: "todo" | "inProgress" | "done"
   ) => void;
   setEditMode: (value: number | null) => void;
 }
@@ -25,6 +26,9 @@ const EditTask: React.FC<EditTaskProps> = ({
   const [editDescription, setEditDescription] = useState(task.description);
   const [editDeadline, setEditDeadline] = useState(task.deadline);
   const [editPriority, setEditPriority] = useState<string>(task.priority);
+  const [newStatus, setNewStatus] = useState<"todo" | "inProgress" | "done">(
+    task.status
+  );
 
   return (
     <div>
@@ -65,7 +69,8 @@ const EditTask: React.FC<EditTaskProps> = ({
             editName,
             editDescription,
             editDeadline,
-            editPriority
+            editPriority,
+            newStatus
           );
           setEditMode(null);
         }}

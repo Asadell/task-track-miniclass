@@ -22,6 +22,7 @@ const ApiInput = () => {
         id="backend-url"
         type="text"
         value={backendUrl ?? ""}
+        placeholder="localhost:8000"
         onChange={(e) => setBackendUrl(e.target.value)}
         className="p-1 w-60 rounded-md border border-gray-300 text-sm outline-none focus:ring-1 focus:ring-blue-400"
       />
