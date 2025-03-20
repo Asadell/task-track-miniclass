@@ -69,8 +69,13 @@ const EditTask: React.FC<EditTaskProps> = ({
           );
           setEditMode(null);
         }}
-        className="mt-2 px-2 py-1 bg-green-500 text-white rounded">
+        className="mt-2 px-2 py-1 bg-green-500 text-white rounded hover:cursor-pointer">
         Simpan
+      </button>
+      <button
+        onClick={() => setEditMode(null)}
+        className="ml-2 px-2 py-1 bg-gray-400 text-white rounded hover:cursor-pointer">
+        Batal
       </button>
     </div>
   );

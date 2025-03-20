@@ -63,7 +63,7 @@ const Modal: React.FC<{
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 hover:cursor-pointer">
             Batal
           </button>
           <button
@@ -77,7 +77,7 @@ const Modal: React.FC<{
                 onClose();
               }
             }}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hover:cursor-pointer">
             Tambah
           </button>
         </div>

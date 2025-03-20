@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { formatDate } from "../utils/dateUtils";
 import { Task } from "../types/task";
 import EditTask from "./EditTask";
+import { CheckCircle, Loader, PauseCircle, Pencil, Trash } from "lucide-react";
 
 interface ColumnProps {
   category: "todo" | "inProgress" | "done";
@@ -37,14 +38,41 @@ const Column: React.FC<ColumnProps> = ({
 
   return (
     <div
-      className="w-1/3 p-4 bg-white shadow-md rounded-lg"
+      className={`w-1/3 p-4 shadow-md rounded-lg ${taskStyles[category]}`}
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => handleDrop(e, category)}>
-      <h2 className="text-lg font-semibold text-blue-600 mb-3 capitalize">
-        {category === "todo" && "📌 To Do"}
-        {category === "inProgress" && "⏳ In Progress"}
-        {category === "done" && "✅ done"}
-      </h2>
+      <div className="flex flex-row items-center gap-2">
+        <h2
+          className={`text-lg font-semibold mb-3 capitalize flex items-center gap-2 text-black rounded-full py-1 px-2 w-[30%]
+          ${category === "todo" ? "bg-[#E8E8E8]" : ""}
+          ${category === "inProgress" ? "bg-[#C8E9FF]" : ""}
+          ${category === "done" ? "bg-[#CAF0B9]" : ""}
+        `}>
+          {category === "todo" && (
+            <>
+              <PauseCircle size={16} /> To Do
+            </>
+          )}
+          {category === "inProgress" && (
+            <>
+              <Loader size={16} className="animate-spin" /> In Progress
+            </>
+          )}
+          {category === "done" && (
+            <>
+              <CheckCircle size={16} className="text-[#6FC349]" /> Done
+            </>
+          )}
+        </h2>
+        <p
+          className={`text-center text-lg font-semibold mb-3 capitalize gap-2 text-black rounded-full py-1 px-2 w-10
+          ${category === "todo" ? "bg-[#E8E8E8]" : ""}
+          ${category === "inProgress" ? "bg-[#C8E9FF]" : ""}
+          ${category === "done" ? "bg-[#CAF0B9]" : ""}
+        `}>
+          {tasks.length}
+        </p>
+      </div>
 
       <div className="space-y-2">
         {tasks.map((task) => (
@@ -52,7 +80,7 @@ const Column: React.FC<ColumnProps> = ({
             key={task.id}
             draggable
             onDragStart={(e) => handleDragStart(e, task)}
-            className={`p-3 rounded-md shadow cursor-pointer flex justify-between items-center ${taskStyles[category]}`}>
+            className={`p-3 rounded-md shadow cursor-pointer flex justify-between items-center bg-white`}>
             {editMode === task.id ? (
               <EditTask
                 task={task}
@@ -71,15 +99,14 @@ const Column: React.FC<ColumnProps> = ({
                 </div>
 
                 <div className="flex items-center text-xs font-semibold mt-2">
-                  <span>⚡ Prioritas: </span>
                   <span
-                    className={`ml-1 px-2 py-1 rounded-full text-white text-xs 
+                    className={`ml-1 px-2 py-1 rounded-sm text-xs
                       ${
                         task.priority === "low"
-                          ? "bg-green-500"
+                          ? "bg-[#E5FFE4] text-[#05CD05]"
                           : task.priority === "medium"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                          ? "bg-[#FFF6E5] text-[#FFB118]"
+                          : "bg-[#FFE5E6] text-[#FE1414]"
                       }`}>
                     {task.priority}
                   </span>
@@ -87,18 +114,18 @@ const Column: React.FC<ColumnProps> = ({
               </div>
             )}
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-col">
               <button
                 onClick={() => {
                   setEditMode(task.id);
                 }}
-                className="text-blue-600">
-                ✏️
+                className="text-blue-600 hover:cursor-pointer">
+                <Pencil />
               </button>
               <button
                 onClick={() => deleteTask(category, task.id)}
-                className="text-red-600">
-                🗑️
+                className="text-red-600 hover:cursor-pointer">
+                <Trash />
               </button>
             </div>
           </div>
@@ -109,9 +136,9 @@ const Column: React.FC<ColumnProps> = ({
 };
 
 const taskStyles = {
-  todo: "bg-red-100 text-red-900 border border-red-300",
-  inProgress: "bg-yellow-100 text-yellow-900 border border-yellow-300",
-  done: "bg-green-100 text-green-900 border border-green-300",
+  todo: "bg-[#F8F8F8]",
+  inProgress: "bg-[#EBF7FC]",
+  done: "bg-[#EDF9E8]",
 };
 
 export default Column;
