@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction } from "react";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import logoEcode from "../assets/logo-ecode.png";

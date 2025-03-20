@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApi } from "../context/ApiContext";
 import { useApiRequest } from "../lib/axios";
 import { Task } from "../types/task";
@@ -10,6 +11,7 @@ const useTaskService = () => {
     if (!backendUrl) return [];
     try {
       const response = await api.get<{ data: Task[] }>("/tasks");
+
       return response.data.data;
     } catch (error: any) {
       throw error.response ? error.response.data : error;
