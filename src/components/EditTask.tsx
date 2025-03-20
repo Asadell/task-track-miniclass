@@ -26,10 +26,7 @@ const EditTask: React.FC<EditTaskProps> = ({
   const [editDescription, setEditDescription] = useState(task.description);
   const [editDeadline, setEditDeadline] = useState(task.deadline);
   const [editPriority, setEditPriority] = useState<string>(task.priority);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [newStatus, setNewStatus] = useState<"todo" | "inProgress" | "done">(
-    task.status
-  );
+  const [newStatus] = useState<"todo" | "inProgress" | "done">(task.status);
 
   return (
     <div>

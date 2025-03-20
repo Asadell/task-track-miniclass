@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Column from "./components/Column";
 import Modal from "./components/Modal";
 import { Task } from "./types/task";
