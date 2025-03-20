@@ -2,14 +2,21 @@ import React, { useState } from "react";
 
 const Modal: React.FC<{
   onClose: () => void;
-  addTask: (name: string, description: string) => void;
+  addTask: (
+    name: string,
+    description: string,
+    deadline: string,
+    priority: string
+  ) => void;
 }> = ({ onClose, addTask }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      onClose(); // Tutup modal jika klik di luar pop-up
+      onClose();
     }
   };
 
@@ -34,7 +41,24 @@ const Modal: React.FC<{
           placeholder="Deskripsi"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded mb-4"></textarea>
+          className="w-full p-2 border rounded mb-3"></textarea>
+
+        <input
+          type="datetime-local"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+        />
+        <select
+          value={priority}
+          onChange={(e) =>
+            setPriority(e.target.value as "low" | "medium" | "high")
+          }
+          className="w-full p-2 border rounded mb-4">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
 
         <div className="flex justify-end gap-2">
           <button
@@ -44,10 +68,12 @@ const Modal: React.FC<{
           </button>
           <button
             onClick={() => {
-              if (name.trim()) {
-                addTask(name, description);
+              if (name.trim() && deadline.trim()) {
+                addTask(name, description, deadline, priority);
                 setName("");
                 setDescription("");
+                setDeadline("");
+                setPriority("medium");
                 onClose();
               }
             }}

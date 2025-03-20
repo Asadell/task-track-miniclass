@@ -1,33 +1,22 @@
 import React, { useState } from "react";
 import Column from "./components/Column";
 import Modal from "./components/Modal";
-
-interface Task {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  status: "todo" | "inProgress" | "complete";
-  deadline: string;
-}
+import { Task } from "./types/task";
 
 interface Tasks {
   todo: Task[];
   inProgress: Task[];
-  complete: Task[];
+  done: Task[];
 }
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Tasks>({
     todo: [],
     inProgress: [],
-    complete: [],
+    done: [],
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const generateSlug = (name: string) =>
-    name.toLowerCase().replace(/\s+/g, "-");
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, task: Task) => {
     e.dataTransfer.setData("taskId", task.id.toString());
@@ -55,14 +44,19 @@ const App: React.FC = () => {
     }
   };
 
-  const addTask = (name: string, description: string) => {
+  const addTask = (
+    name: string,
+    description: string,
+    deadline: string,
+    priority: string
+  ) => {
     const newTask: Task = {
       id: Date.now(),
       name,
-      slug: generateSlug(name),
       description,
       status: "todo",
-      deadline: new Date().toISOString(),
+      deadline,
+      priority, // Tambahkan priority
     };
 
     setTasks((prev) => ({
@@ -77,19 +71,22 @@ const App: React.FC = () => {
     category: keyof Tasks,
     taskId: number,
     newName: string,
-    newDescription: string
+    newDescription: string,
+    newDeadline: string,
+    newPriority: string
   ) => {
-    setTasks((prev) => ({
-      ...prev,
-      [category]: prev[category].map((t) =>
-        t.id === taskId
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [category]: prevTasks[category].map((task) =>
+        task.id === taskId
           ? {
-              ...t,
+              ...task,
               name: newName,
-              slug: generateSlug(newName),
               description: newDescription,
+              deadline: newDeadline,
+              priority: newPriority,
             }
-          : t
+          : task
       ),
     }));
   };

@@ -1,30 +1,26 @@
 import React, { useState } from "react";
-
-interface Task {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  status: "todo" | "inProgress" | "complete";
-  deadline: string;
-}
+import { formatDate } from "../utils/dateUtils";
+import { Task } from "../types/task";
+import EditTask from "./EditTask";
 
 interface ColumnProps {
-  category: "todo" | "inProgress" | "complete";
+  category: "todo" | "inProgress" | "done";
   tasks: Task[];
   handleDragStart: (e: React.DragEvent<HTMLDivElement>, task: Task) => void;
   handleDrop: (
     e: React.DragEvent<HTMLDivElement>,
-    category: "todo" | "inProgress" | "complete"
+    category: "todo" | "inProgress" | "done"
   ) => void;
   editTask: (
-    category: "todo" | "inProgress" | "complete",
+    category: "todo" | "inProgress" | "done",
     taskId: number,
     newName: string,
-    newDescription: string
+    newDescription: string,
+    newDeadline: string,
+    newPriority: string
   ) => void;
   deleteTask: (
-    category: "todo" | "inProgress" | "complete",
+    category: "todo" | "inProgress" | "done",
     taskId: number
   ) => void;
 }
@@ -38,8 +34,6 @@ const Column: React.FC<ColumnProps> = ({
   deleteTask,
 }) => {
   const [editMode, setEditMode] = useState<number | null>(null);
-  const [editName, setEditName] = useState("");
-  const [editDescription, setEditDescription] = useState("");
 
   return (
     <div
@@ -47,7 +41,9 @@ const Column: React.FC<ColumnProps> = ({
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => handleDrop(e, category)}>
       <h2 className="text-lg font-semibold text-blue-600 mb-3 capitalize">
-        {category.replace("inProgress", "In Progress")}
+        {category === "todo" && "📌 To Do"}
+        {category === "inProgress" && "⏳ In Progress"}
+        {category === "done" && "✅ done"}
       </h2>
 
       <div className="space-y-2">
@@ -56,32 +52,38 @@ const Column: React.FC<ColumnProps> = ({
             key={task.id}
             draggable
             onDragStart={(e) => handleDragStart(e, task)}
-            className="p-3 bg-blue-200 text-blue-900 rounded-md shadow cursor-pointer flex justify-between items-center">
+            className={`p-3 rounded-md shadow cursor-pointer flex justify-between items-center ${taskStyles[category]}`}>
             {editMode === task.id ? (
-              <div>
-                <input
-                  type="text"
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                  className="p-1 bg-white border rounded"
-                />
-                <textarea
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                  className="p-1 bg-white border rounded w-full mt-1"></textarea>
-                <button
-                  onClick={() => {
-                    editTask(category, task.id, editName, editDescription);
-                    setEditMode(null);
-                  }}
-                  className="mt-2 px-2 py-1 bg-green-500 text-white rounded">
-                  Simpan
-                </button>
-              </div>
+              <EditTask
+                task={task}
+                category={category}
+                editTask={editTask}
+                setEditMode={setEditMode}
+              />
             ) : (
-              <div>
-                <p className="font-semibold">{task.name}</p>
+              <div className="w-full">
+                <p className="font-semibold text-lg">{task.name}</p>
                 <p className="text-sm text-gray-600">{task.description}</p>
+
+                <div className="flex items-center text-xs text-gray-500 mt-2">
+                  <span className="mr-1">🕒</span>
+                  <span>{formatDate(task.deadline)}</span>
+                </div>
+
+                <div className="flex items-center text-xs font-semibold mt-2">
+                  <span>⚡ Prioritas: </span>
+                  <span
+                    className={`ml-1 px-2 py-1 rounded-full text-white text-xs 
+                      ${
+                        task.priority === "low"
+                          ? "bg-green-500"
+                          : task.priority === "medium"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                      }`}>
+                    {task.priority}
+                  </span>
+                </div>
               </div>
             )}
 
@@ -89,8 +91,6 @@ const Column: React.FC<ColumnProps> = ({
               <button
                 onClick={() => {
                   setEditMode(task.id);
-                  setEditName(task.name);
-                  setEditDescription(task.description);
                 }}
                 className="text-blue-600">
                 ✏️
@@ -106,6 +106,12 @@ const Column: React.FC<ColumnProps> = ({
       </div>
     </div>
   );
+};
+
+const taskStyles = {
+  todo: "bg-red-100 text-red-900 border border-red-300",
+  inProgress: "bg-yellow-100 text-yellow-900 border border-yellow-300",
+  done: "bg-green-100 text-green-900 border border-green-300",
 };
 
 export default Column;
