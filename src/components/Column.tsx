@@ -90,7 +90,7 @@ const Column: React.FC<ColumnProps> = ({
                 setEditMode={setEditMode}
               />
             ) : (
-              <div className="w-full p-4 bg-white rounded-lg shadow-md">
+              <div className="w-full p-4 bg-white rounded-lg">
                 <p className="font-bold text-lg text-gray-800">{task.name}</p>
                 <p className="text-sm text-gray-600 mt-1">{task.description}</p>
 
