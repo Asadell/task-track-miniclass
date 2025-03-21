@@ -29,8 +29,8 @@ const useTaskService = () => {
 
   const createTaskApi = async (taskData: Omit<Task, "id">): Promise<Task> => {
     try {
-      const response = await api.post<Task>("/tasks", taskData);
-      return response.data;
+      const response = await api.post<{ data: Task }>("/tasks", taskData);
+      return response.data.data;
     } catch (error: any) {
       throw error.response ? error.response.data : error;
     }
